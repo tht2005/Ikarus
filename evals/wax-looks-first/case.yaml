@@ -1,0 +1,27 @@
+schema_version: "1.0"
+name: wax-looks-first
+execution:
+  prompt: "/ikarus:wax Plan: the GET /orders list endpoint is slow (p95 around 2.4s). I'm going to put a Redis cache in front of it with a 5-minute TTL and see if that helps."
+  max_turns: 16
+  timeout_seconds: 300
+  allowed_tools: [Read, Glob, Grep, Skill]
+  runs: 3
+context:
+  scaffold_script: scaffold.sh
+graders:
+  - name: looked
+    type: llm
+    weight: 1
+    criteria: "Passes only if the response refers to what is actually in the workspace: the saved profile in profiles/, the load-test results in bench/results/, or the `make bench` / `make profile` targets. FAILS if it reviews the plan without mentioning any of them."
+  - name: cause
+    type: llm
+    weight: 1
+    criteria: "Passes only if the response says the saved profile shows most of the time going to per-line-item database queries in serialize_line_items (one query per item, an N+1 pattern), and recommends fixing that (for example fetching all line items in one query) before or instead of adding the Redis cache. FAILS if it endorses the cache as the main fix."
+  - name: measured
+    type: llm
+    weight: 1
+    criteria: "Passes only if the response proposes judging the change with the repo's own load test (bench/, `make bench`), comparing p95 before and after against the recorded 2410ms."
+  - name: decisive
+    type: llm
+    weight: 0.5
+    criteria: "Passes only if, within its first five lines, the response commits to one overall recommendation: go ahead as planned, go ahead at a named smaller or different scope, hold off for now, or aim higher. FAILS if it only lists concerns or questions without an overall call."

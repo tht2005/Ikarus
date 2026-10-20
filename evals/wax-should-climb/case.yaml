@@ -1,0 +1,17 @@
+schema_version: "1.0"
+name: wax-should-climb
+execution:
+  prompt: "/ikarus:wax Plan for the flaky checkout test: write a script that reruns tests/test_checkout.py 500 times under different seeds and CPU loads in our Docker test image, bisect the last 40 commits using flake rate as the signal, fix the root cause, then add the 500-run loop as a nightly CI job that posts to #eng-ci if the flake rate goes above 0.5%. Fallback: if the bisect is inconclusive, quarantine the test with a tracking issue. We own the repo and the CI config, and nothing is on fire."
+  max_turns: 16
+  timeout_seconds: 300
+  allowed_tools: [Read, Glob, Grep, Skill]
+  runs: 3
+graders:
+  - name: lets-it-fly
+    type: llm
+    weight: 1
+    criteria: "The workspace is deliberately empty, so the response cannot see the repo. Passes only if the response recommends going ahead with the plan as written, possibly with refinements (for example about statistical power of the alert threshold or checking that the flake reproduces before bisecting). Saying it needs access to the repo before it can start does not count against it, as long as the plan itself is cleared to run. FAILS only if it recommends dropping or shrinking a core part of the plan (the 500-run reproduction, the bisect, the root-cause fix, or the nightly job) or blocks on concerns the prompt already answers (ownership, urgency, fallback)."
+  - name: decisive
+    type: llm
+    weight: 0.5
+    criteria: "Passes only if, within its first five lines, the response commits to one overall recommendation: go ahead as planned, go ahead at a named smaller or different scope, hold off for now, or aim higher. FAILS if it only lists concerns or questions without an overall call."

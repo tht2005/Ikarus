@@ -1,6 +1,6 @@
 ---
 name: wax
-description: "Check an ambitious or expanded plan before carrying it out, so ambition doesn't melt the wings: mandate, urgency, a real judge, access, reversibility, cost, a fallback, and whether the plan is actually too timid. Returns CLIMB, TRIM, GROUND or HIGHER with a reason. Use when the user invokes /ikarus:wax, after any ikarus skill recommends a rung above 'as asked', and whenever your own plan has grown well beyond what the user asked for (new infrastructure, many subagents, outward-facing actions)."
+description: "Check an ambitious or expanded plan before carrying it out, so ambition doesn't melt the wings: mandate, urgency, a real judge, access, reversibility, cost, a fallback, and whether the plan is actually too timid. Returns CLIMB, TRIM, GROUND or HIGHER with a reason. Use when the user invokes /ikarus:wax; when they ask you to sanity-check, gut-check, pressure-test or poke holes in a plan before saying go; after any ikarus skill recommends a rung above 'as asked'; and whenever your own plan has grown well beyond what the user asked for (new infrastructure, many subagents, outward-facing actions)."
 argument-hint: "[plan to check, or leave empty for the current plan]"
 ---
 
@@ -10,6 +10,10 @@ Icarus's wings worked; the wax failed. Daedalus told him to fly the middle cours
 
 **Plan.** The invoking message reads: $ARGUMENTS
 If that is empty, check the plan or rung currently on the table.
+
+## Look first
+
+Before judging, open what the plan refers to: the test it wants to fix, the config a command will run, the data it plans to sample, plus a quick listing of the workspace. Plans are written from memory, and the files often say something the plan doesn't: a profile that points somewhere else, a second month of data, a campaign that emails customers. A verdict on the plan as written is only as good as the plan's author's memory.
 
 ## The checks
 

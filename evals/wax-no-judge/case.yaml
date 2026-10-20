@@ -1,0 +1,23 @@
+schema_version: "1.0"
+name: wax-no-judge
+execution:
+  prompt: "/ikarus:wax Plan: read our sales call transcripts in ./calls/, score every open deal 0-100 on how likely it is to close, and send the ranked list to the sales team on Monday as this quarter's forecast."
+  max_turns: 16
+  timeout_seconds: 300
+  allowed_tools: [Read, Glob, Grep, Skill]
+  runs: 3
+context:
+  scaffold_script: scaffold.sh
+graders:
+  - name: outside-check
+    type: llm
+    weight: 1
+    criteria: "Passes only if the response proposes backtesting the scoring on deals whose outcome is already known, and names the closed deals in crm/deals.csv (the outcome column, won/lost) as the data for that check. FAILS if it does not point to the CRM file's closed deals."
+  - name: forecast-gate
+    type: llm
+    weight: 1
+    criteria: "Passes only if the response does not approve sending the ranked list to the sales team as this quarter's forecast as planned: it holds that step until the scores have been checked, or requires it to go out labelled as experimental with the user's sign-off. FAILS if the Monday send is approved as written."
+  - name: decisive
+    type: llm
+    weight: 0.5
+    criteria: "Passes only if, within its first five lines, the response commits to one overall recommendation: go ahead as planned, go ahead at a named smaller or different scope, hold off for now, or aim higher. FAILS if it only lists concerns or questions without an overall call."

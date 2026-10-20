@@ -25,16 +25,22 @@ Claude can start `fly` (when you explicitly ask to think bigger) and `wax` (when
 
 ## Install
 
-Try it for one session:
+Clone it wherever you keep plugins:
 
 ```sh
-claude --plugin-dir ~/Git/ikarus
+git clone https://github.com/tht2005/Ikarus.git ikarus
 ```
 
-Or install it from the bundled single-plugin marketplace:
+Try it for one session by pointing Claude Code at the clone:
 
 ```sh
-claude plugin marketplace add ~/Git/ikarus
+claude --plugin-dir ./ikarus
+```
+
+Or install it so it loads in every session. The repo is its own single-plugin marketplace, so you can add it from the clone or straight from GitHub:
+
+```sh
+claude plugin marketplace add ./ikarus        # or: claude plugin marketplace add tht2005/Ikarus
 claude plugin install ikarus@ikarus
 ```
 
@@ -50,8 +56,13 @@ Leave the argument empty to apply a skill to the task already under discussion.
 
 ## Evals
 
-`evals/` holds one case per skill behaviour, graded by an LLM judge against written criteria, including two that check wax pushes back in both directions and one that checks `fly` stays out of an ordinary debugging request.
+`evals/` holds one case per skill behaviour, graded by an LLM judge against written criteria, plus a should-not-fire case for `fly` and one for `wax`.
+
+The `wax-*` cases are deliberately hard. A strong model reviewing a plan already catches the obvious problems, so most of these put the deciding fact in the workspace rather than in the prompt: a saved profile that contradicts the plan's guess, a second month of transcripts to compare against, closed deals to backtest on, a `make campaign` that turns out to email customers as the CEO. They pass only if the reviewer looks before judging. `wax-should-climb` is the counterweight: a sound plan that should be cleared to fly, not trimmed by reflex.
+
+Those cases build their workspace with a `scaffold.sh` next to `case.yaml`, so they need `--scaffold`. The rubrics are nuanced enough that a small judge is noisy; use Sonnet.
 
 ```sh
-claude plugin eval . --runs 1 --concurrency 4 --no-publish
+claude plugin eval . --scaffold --judge-model sonnet --concurrency 4 --no-publish
+claude plugin eval . --scaffold --judge-model sonnet --case 'wax-*' --no-publish   # just the wax suite
 ```
