@@ -28,6 +28,16 @@ List what the most ambitious reasonable version of the target would need, in fiv
 
 Check rather than assume; a few quick commands beat a guess. List what's in the working directory, look for data files and for config that names data sources, check that key tools are installed, look at which connectors and MCP tools this session has, and test whether you can install packages. Keep it to a few minutes. This is a preflight, not an audit.
 
+For GPU kernel work, also check:
+- the GPU and its arch;
+- the ROCm or CUDA version;
+- whether the profilers are installed, including thread-trace support;
+- permission to read counters and collect traces;
+- whether clocks can be locked;
+- whether anyone else is using the GPU.
+
+The section on preflight in `../../playbooks/gpu-kernels.md` lists the commands. For theoretical or analytical research, check for a computer algebra system, a proof assistant if one is warranted, compute for simulations, and access to the primary papers.
+
 ## 3. Sort the gaps
 
 For each need that isn't met, mark who can close it:

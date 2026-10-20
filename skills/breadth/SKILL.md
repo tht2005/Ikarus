@@ -38,6 +38,8 @@ Recommended: rung N, <why>
 
 For example, "fix this null dereference in orders.ts" → the search finds 14 call sites with the same pattern → fix all 14 → make `getUser()` return a type that forces the check → add a lint rule so the pattern can't come back.
 
+In research and optimization the class is usually conditions, not call sites. One GEMM shape → the shapes and dtypes the real workload uses → a tuned config table or autotuner → a performance regression test. One dataset or regime → every condition the claim is meant to cover, where a boundary at which the effect stops holding is itself a finding. One caution: testing across many conditions is also many chances to find noise. Confirm whatever looks best on conditions or runs it wasn't selected from.
+
 If `/ikarus:fly` is running this as part of a flight plan, return the ladder to it and stop here. Otherwise ask which rung to take, with AskUserQuestion if it is available, or in plain text followed by stopping, unless the user already said to go or named a rung. Before taking any rung above 0, run the checks in `../wax/SKILL.md`; keep that brief unless something fails.
 
 ## 4. Doing it

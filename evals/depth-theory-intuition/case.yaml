@@ -1,0 +1,21 @@
+schema_version: "1.0"
+name: depth-theory-intuition
+execution:
+  prompt: "/ikarus:depth I want real intuition for why attention entropy collapses as the logit scale grows (a lower softmax temperature, or larger q.k norms), and when that becomes a problem for training. Go with your recommended rung."
+  max_turns: 20
+  timeout_seconds: 600
+  allowed_tools: [Read, Glob, Grep, Skill]
+  runs: 3
+graders:
+  - name: intuition-moves
+    type: llm
+    weight: 1
+    criteria: "Passes only if the response builds the intuition with at least two of: a toy case with two or three keys; limiting cases (scale -> 0 gives uniform attention with entropy log n, scale -> infinity gives one-hot attention with entropy 0); a scaling argument about how the gap between the top logits times the scale controls the entropy; a worked numeric example."
+  - name: numeric-check
+    type: llm
+    weight: 1
+    criteria: "Passes only if the response checks at least one claimed formula or behaviour numerically, or gives a concrete short script or computation that would (e.g. computing softmax entropy over a range of scales), rather than relying on the derivation alone."
+  - name: training-mechanism
+    type: llm
+    weight: 1
+    criteria: "Passes only if the response connects the collapse to training through a mechanism, for example that the softmax Jacobian, with entries like p_i(delta_ij - p_j), vanishes as attention becomes one-hot so gradients through attention stall, or that growing logits drive instability and loss spikes, and names at least one mitigation such as QK-norm, logit soft-capping or temperature control."

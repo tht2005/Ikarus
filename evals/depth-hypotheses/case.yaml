@@ -1,0 +1,21 @@
+schema_version: "1.0"
+name: depth-hypotheses
+execution:
+  prompt: "/ikarus:depth Our 7B model's training loss spikes roughly every 2,000 steps and recovers within about 50 steps. We train in bf16 with AdamW and a cosine LR schedule with warmup, and we checkpoint every 2,000 steps. Why is this happening? Go with your recommended rung."
+  max_turns: 20
+  timeout_seconds: 600
+  allowed_tools: [Read, Glob, Grep, Skill]
+  runs: 3
+graders:
+  - name: competing
+    type: llm
+    weight: 1
+    criteria: "Passes only if the response weighs at least three distinct hypotheses, including BOTH the checkpoint coincidence (the spike period equals the checkpoint interval, e.g. data-loader position or shuffling reset on save/resume, or optimizer or loss-scale state handling) AND at least one cause unrelated to checkpointing (e.g. a recurring bad data shard or epoch/shard boundary, bf16 numerical instability such as growing attention logits, Adam second-moment effects). FAILS if it commits to a single explanation."
+  - name: crucial-experiment
+    type: llm
+    weight: 1
+    criteria: "Passes only if the response proposes at least one experiment that discriminates between the hypotheses rather than only gathering more logs, and the clearest is changing the checkpoint interval (e.g. to 1,500 or 3,000 steps) to see whether the spike period follows it, and it says which outcome supports which hypothesis."
+  - name: predictions-first
+    type: llm
+    weight: 1
+    criteria: "Passes only if the response states, before any results exist, which outcome of the proposed experiments each main hypothesis predicts: a mapping from outcomes to hypotheses such as 'if the spikes move to the new interval, it is checkpoint-related; if they stay at the shard boundary, it is data-related'. Naming a leading hypothesis is fine as long as the competitors are kept and the predictions are stated. FAILS if it declares a cause without such predictions."

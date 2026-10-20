@@ -45,6 +45,7 @@ Before calling anything rung 2 or above, check that:
 - it lives in version control, not in a chat transcript;
 - it has no hard-coded local paths or secrets, and credentials come from the environment or a connector;
 - running it twice is safe;
+- it records the environment it ran in (tool and library versions, hardware, clocks, seeds), so results from different runs can be compared; in research and benchmarking, an unrecorded environment makes old results unreadable;
 - failure is loud: it alerts or fails visibly instead of quietly producing stale output;
 - someone owns it, and the README says how to turn it off.
 

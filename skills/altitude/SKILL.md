@@ -39,6 +39,8 @@ A coding example:
 - 2: keep the app crash-free, with a loop that fetches new crash reports, maps them to commits, reproduces, fixes and verifies.
 - Above the ceiling: "make users happy" has no check at the level of a rung.
 
+**Research and optimization.** For performance work, the first climb is Amdahl's: what share of end-to-end time is this kernel or function? A 2× speedup on 4% of the step saves 2%, and sometimes the highest rung is fusing the kernel away or not launching it at all. Here the ceiling is physical: the hardware's speed-of-light bound, not an abstract goal. For research, rungs climb from the question to the claim it supports to the decision or next experiment that claim unlocks. Exploratory research, where the question itself is still forming, fits altitude as poorly as creative work does. For these tasks, `../../playbooks/research.md` and `../../playbooks/gpu-kernels.md` have the details.
+
 ## For each rung, note
 
 - **Deliverable**: what exists when it's done.

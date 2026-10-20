@@ -1,0 +1,31 @@
+schema_version: "1.0"
+name: depth-att-trace
+execution:
+  prompt: "/ikarus:depth The ATT hotspot summary, counters and resource usage for our fused RMSNorm kernel are in profile/, and the source is in kernels/. Analyze them and propose how to make the kernel faster. Go with your recommended rung."
+  max_turns: 20
+  timeout_seconds: 600
+  allowed_tools: [Read, Glob, Grep, Skill]
+  runs: 3
+context:
+  scaffold_script: scaffold.sh
+graders:
+  - name: speed-of-light
+    type: llm
+    weight: 1
+    criteria: "Passes only if the response computes a speed-of-light bound from the minimum bytes moved (about 537 MB: the 16384x8192 bf16 input read once plus the output written once) divided by bandwidth (the 4.2 TB/s measured peak, or about 5.3 TB/s datasheet), giving roughly 100-130 us, and states that the current 410 us is about 3-4x above it (or roughly 25-35% of the bound)."
+  - name: trace-reading
+    type: llm
+    weight: 1
+    criteria: "Passes only if the response identifies from profile/att_hotspots.csv that most cycles are stalls at s_waitcnt vmcnt(0) immediately after narrow 2-byte global_load_ushort loads, in both passes over the row (one wait per tiny load), AND notes that the input row is read a second time in the normalize pass. It does not matter whether the response says that re-read hits L2 or HBM; the counters (271 MB of HBM reads for a 268 MB input) suggest L2, and saying so is correct."
+  - name: rules-out
+    type: llm
+    weight: 1
+    criteria: "Passes only if the response uses the counters to tell competing explanations apart rather than asserting one: for example, achieved HBM bandwidth of 1.31 TB/s against a 4.2 TB/s measured peak rules out being bandwidth-bound, and occupancy of 8 waves/SIMD with 14 VGPRs rules out register-limited occupancy, leaving narrow loads and serialized waits (latency/request-bound) as the explanation."
+  - name: judge
+    type: llm
+    weight: 1
+    criteria: "Passes only if the response says how proposed changes will be judged by something other than the model: BOTH a correctness check against a reference with a tolerance AND a stated performance measurement (for example repeated timed runs with a stated statistic, a copy-kernel ceiling at the same shape, or counters collected per variant). FAILS if changes are proposed with no correctness check or no measurement plan."
+  - name: proposals
+    type: llm
+    weight: 0.5
+    criteria: "Passes only if the response proposes at least two of: vectorized 16-byte loads (8 bf16 per load) instead of 2-byte loads; more loads in flight before each wait (unrolling or holding the row in registers, 8192 values over 256 threads being 32 per thread, which also removes the second global read); a cheaper reduction with wave-level shuffles or DPP instead of the 8-step LDS tree with a barrier at each step."

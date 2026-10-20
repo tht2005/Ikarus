@@ -33,6 +33,13 @@ For each axis, score 0–3 how far the task as asked sits below what's possible 
 
 Scores are judgments, so say where you are unsure. A 0 is a fine answer; not every task has headroom on every axis.
 
+For research (theory, hypotheses, data analysis) or GPU kernel performance work, read `../../playbooks/research.md` or `../../playbooks/gpu-kernels.md` before scoring. In those fields the high-headroom signs look different:
+- a kernel judged on wall time alone, with no speed-of-light bound;
+- a kernel tuned without knowing its share of end-to-end time;
+- one favored explanation and no competitors;
+- a derivation nobody has checked numerically;
+- one shape, one dataset, or one seed.
+
 ## 3. Pick one or two axes
 
 Take the one or two axes with the most headroom. Stacking all five is how you get the sun: the plan balloons, nothing is checkable, and nothing ships.

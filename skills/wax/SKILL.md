@@ -21,12 +21,12 @@ Go through them quickly. Most plans pass most checks, and the report only needs 
 
 1. **Mandate.** Did the user ask for this scope? A higher rung is a proposal, not permission. If they haven't picked it, ask.
 2. **Urgency.** Is the user in the middle of an incident or up against a deadline? Then do the as-asked version now and offer the climb afterward. A crash-free-apps loop is no help while production is down.
-3. **Judge.** Is there something other than the model that can tell whether this rung worked, such as a test, held-out data, a backtest, or a person who will review it? If not, the rung is above the ceiling: drop a rung or add a judge.
+3. **Judge.** Is there something other than the model that can tell whether this rung worked, such as a test, held-out data, a backtest, or a person who will review it? If not, the rung is above the ceiling: drop a rung or add a judge. In research and benchmarking, also check that the judge is valid. A benchmark with no warm-up, a noisy shared GPU, warm caches or unrepresentative shapes measures the wrong thing. A derivation the model "checked" by rereading it hasn't been checked. A winner picked from many variants or hypotheses is partly picked on noise, so it needs a fresh re-measurement or held-out confirmation before it counts.
 4. **Access.** Can the plan reach the data, tools and environments it needs? A plan built on access it doesn't have produces confident fiction. If unsure, read and run `../preflight/SKILL.md`.
 5. **Reversibility.** Does it touch shared or outward-facing things: production, other people's code, messages to people, money, anything scheduled to run unattended? Those steps need explicit approval whatever rung was picked.
-6. **Cost.** Roughly what time, tokens or money will it take, compared with what the outcome is worth? Eight subagents to fix a typo is the sun.
+6. **Cost.** Roughly what time, tokens, money or GPU-hours will it take, compared with what the outcome is worth? Eight subagents to fix a typo is the sun, and so is a week of kernel tuning on 3% of the step.
 7. **Fallback.** Is there a lower rung that still ships something useful if this one fails? Every plan needs one. When the fallback is cheap, deliver it first: ship the fix, then build the loop.
-8. **Too low?** Check the other side too. If the session has the access, the task has the headroom, and the plan is still the timid default, say so. Under-reaching is a failure, not a safe choice.
+8. **Too low?** Check the other side too. If the session has the access, the task has the headroom, and the plan is still the timid default, say so: stopping at 40% of a kernel's speed-of-light bound with clear stalls in the trace, or testing one favored hypothesis when three are live. Under-reaching is a failure, not a safe choice.
 
 ## Verdict
 

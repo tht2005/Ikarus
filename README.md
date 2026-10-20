@@ -23,6 +23,13 @@ When axes combine, they run in this order: preflight → altitude → depth / ra
 
 Claude can start `fly` (when you explicitly ask to think bigger) and `wax` (when a plan has grown well past what you asked) on its own. The axis skills only run when you invoke them.
 
+## Research and GPU kernels
+
+The axes are field-agnostic; what changes between fields is the instruments, the judges and the traps. Two playbooks carry that knowledge, and the skills read them only when the task calls for it, so they cost nothing otherwise:
+
+- `playbooks/research.md`: building intuition (toy models, limiting cases, scaling, numeric checks of derivations), strong inference for hypotheses (competing explanations, a crucial experiment, predictions written down first), data analysis, and reading primary sources.
+- `playbooks/gpu-kernels.md`: Amdahl first, a speed-of-light bound, timing done right, counters, ISA, and reading ATT thread traces. It includes a table from trace symptom to competing hypotheses to the experiment that tells them apart. It's written for AMD Instinct and ROCm, and the method carries over to NVIDIA.
+
 ## Install
 
 Clone it wherever you keep plugins:
