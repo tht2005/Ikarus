@@ -1,0 +1,15 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "ikarus",
+  "description": "Single-plugin marketplace for ikarus.",
+  "owner": {
+    "name": "Nguyen Dinh Dang Duong"
+  },
+  "plugins": [
+    {
+      "name": "ikarus",
+      "description": "Skills for being more ambitious with models: fly, preflight, altitude, depth, range, breadth, horizon, wax.",
+      "source": "./"
+    }
+  ]
+}

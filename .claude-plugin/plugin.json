@@ -1,0 +1,17 @@
+{
+  "name": "ikarus",
+  "version": "0.1.0",
+  "description": "Skills for being more ambitious with models without flying into the sun. /ikarus:fly finds where a task has the most headroom; /ikarus:altitude, depth, range, breadth and horizon each climb one axis as a ladder of rungs you pick from; /ikarus:preflight checks what the session can reach; /ikarus:wax checks the plan before it flies.",
+  "author": {
+    "name": "Nguyen Dinh Dang Duong"
+  },
+  "license": "MIT",
+  "keywords": [
+    "ambition",
+    "altitude",
+    "depth",
+    "range",
+    "prompting",
+    "skills"
+  ]
+}
