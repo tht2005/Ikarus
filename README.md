@@ -73,3 +73,7 @@ Those cases build their workspace with a `scaffold.sh` next to `case.yaml`, so t
 claude plugin eval . --scaffold --judge-model sonnet --concurrency 4 --no-publish
 claude plugin eval . --scaffold --judge-model sonnet --case 'wax-*' --no-publish   # just the wax suite
 ```
+
+## License
+
+MIT, see `LICENSE`.
